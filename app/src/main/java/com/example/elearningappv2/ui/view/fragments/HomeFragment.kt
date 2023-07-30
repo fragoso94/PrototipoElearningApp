@@ -18,6 +18,7 @@ import com.example.elearningappv2.ui.view.CourseListVideoActivity
 import com.example.elearningappv2.ui.view.DetailActivity
 import com.example.elearningappv2.ui.view.adapter.RecyclerAdapter
 import com.example.elearningappv2.ui.viewmodel.CourseViewModel
+import com.example.elearningappv2.ui.viewmodel.CreateAccountViewModel
 import com.example.elearningappv2.ui.viewmodel.IntroductionViewModel
 import com.example.elearningappv2.utilities.Helpers
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -128,7 +129,7 @@ class HomeFragment : Fragment() {
     private fun initObservers(context: Context) {
         introductionViewModel.navigateToDetailCourse.observe(this, Observer {
             it.getContentIfNotHandled()?.let {
-                Log.d("observer", it.toString())
+                //Log.d("observer", it.toString())
                 goToDetail(context, it)
             }
 

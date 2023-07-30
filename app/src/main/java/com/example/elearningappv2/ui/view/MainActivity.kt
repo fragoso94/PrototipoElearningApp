@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.elearningappv2.databinding.ActivityMainBinding
+import com.example.elearningappv2.domain.model.User
 import com.example.elearningappv2.ui.viewmodel.CourseViewModel
 import com.example.elearningappv2.ui.viewmodel.IntroductionViewModel
+import com.example.elearningappv2.ui.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,22 +25,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     //viewmodels
-    //private val courseViewModel: CourseViewModel by viewModels()
     private val introductionViewModel: IntroductionViewModel by viewModels()
+    private val loginViewModel : LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*courseViewModel.onCreateCourse()
-        courseViewModel.courseModel.observe(this, Observer
-        {
-            //binding.tvPrueba.text = it.name + "\n"
-            it?.forEach { item ->
-                Log.d("dfragoso", item.toString())
-            }
-        })*/
         initUI()
     }
 
@@ -48,7 +43,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun initListeners() {
         with(binding) {
-            btnLogin.setOnClickListener { introductionViewModel.onHomeSelected() }
+            btnLogin.setOnClickListener {
+                if(etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()){
+                    loginViewModel.loginSelected(etEmail.text.toString(), etPassword.text.toString())
+                    loginViewModel.responseModel.observe(this@MainActivity, Observer {
+                        if (it.exito){
+                            introductionViewModel.onHomeSelected()
+                        }
+                        else{
+                            Log.d("dfragoso94",it.mensaje)
+                        }
+                    })
+                }
+            }
             tvSignup.setOnClickListener { introductionViewModel.onSignInSelected() }
         }
     }
@@ -63,6 +70,9 @@ class MainActivity : AppCompatActivity() {
             it.getContentIfNotHandled()?.let {
                 goToSingIn()
             }
+        })
+        loginViewModel.isLoading.observe(this, Observer{
+            binding.progress.isVisible = it
         })
     }
 

@@ -19,8 +19,6 @@ data class UserEntity(
     var mobile: String,
 
     @ColumnInfo(name = "password")
-
-
     var password: String,
 
     @ColumnInfo(name = "status")
