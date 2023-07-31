@@ -8,8 +8,9 @@ data class User(
     val email: String,
     var mobileNumber: String,
     var password: String,
+    var status: Boolean,
     var cursos: MutableList<Course> = mutableListOf()
 )
 
-fun UserEntity.toDomain() = User(id, name, email, mobile, password)
-fun User.toDomain() = UserEntity(name= name, email= email, mobile = mobileNumber, password = password, status= false)
+fun UserEntity.toDomain() = User(id, name, email, mobile, password, status)
+fun User.toDomain() = UserEntity(name= name, email= email, mobile = mobileNumber, password = password, status= status)

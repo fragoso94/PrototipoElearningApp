@@ -20,7 +20,7 @@ class CourseViewModel @Inject constructor(
 ) : ViewModel()
 {
     val courseModel = MutableLiveData<List<Course>?>()
-    val userModel = MutableLiveData<User>()
+    val userModel = MutableLiveData<User?>()
     val courseShoppingModel = MutableLiveData<List<Int>>()
     //val isLoading = MutableLiveData<Boolean>()
 

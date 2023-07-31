@@ -53,7 +53,8 @@ class SignUpActivity : AppCompatActivity() {
                         name = etName.text.toString(),
                         email = etEmailAddress.text.toString(),
                         mobileNumber = etMobile.text.toString(),
-                        password = etCreatePassword.text.toString()
+                        password = etCreatePassword.text.toString(),
+                        status = false
                     )
                     createAccountViewModel.signInUser(userSignIn)
                     createAccountViewModel.responseModel.observe(this@SignUpActivity, Observer

@@ -42,7 +42,16 @@ class CourseRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserFromDatabase(email: String): User {
+    suspend fun updateUserStatusFromDatabase(user: String, status: Boolean): Boolean {
+        return try {
+            userDao.updateStatusUser(user, status)
+            true
+        } catch (e: java.lang.Exception) {
+            false
+        }
+    }
+
+    suspend fun getUserFromDatabase(email: String): User? {
         return userDao.getUserEmail(email).toDomain()
     }
 
