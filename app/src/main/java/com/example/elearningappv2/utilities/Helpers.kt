@@ -19,9 +19,9 @@ class Helpers {
         const val IS_VIEW_BUY = "courseTYPE"
         const val URL_BASE_API = "https://apicursosbedu.servicesnet.site/api/" //"http://192.168.1.164:9095/"
         const val TAG = "dfragoso94"
-        // Código para los permisos de la camará
-        const val PERMISSION_CODE = 1000
-        const val IMAGE_CAPTURE_CODE = 1001
+        val PUBLIC_KEY = "key_PNPkyo2hK13YLb4FBwTpEMI"
+        private val PRIVATE_KEY = "key_kR3tXnFCM0od3jSwPFNB8Js"
+        val API_VERSION = "0.3.0"
 
         fun createUnsafeOkHttpClient(): OkHttpClient {
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {

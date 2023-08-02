@@ -26,19 +26,20 @@ class LoginViewModel @Inject constructor(
     fun loginSelected(user: String, password: String) {
         viewModelScope.launch {
             isLoading.postValue(true)
-            when (val result = loginUseCase(user, password)) {
+            when (val result = loginUseCase(user.trim(), password.trim())) {
                 LoginResult.Error -> {
                     responseModel.postValue(SimpleResponse(exito = false, mensaje = "Error al autenticarse."))
                 }
                 is LoginResult.Success -> {
                     //update status user
-                    val userExist = getUserUseCase(user)
+                    /*val userExist = getUserUseCase(user)
                     if (userExist != null){
                         val response = updateUserStatusUseCase(user, true)
                         if (response){
                             responseModel.postValue(SimpleResponse(exito = true, mensaje = "La cuenta se verifico correctamente."))
                         }
-                    }
+                    }*/
+                    responseModel.postValue(SimpleResponse(exito = true, mensaje = "La cuenta se verifico correctamente."))
                 }
             }
             isLoading.postValue(false)
