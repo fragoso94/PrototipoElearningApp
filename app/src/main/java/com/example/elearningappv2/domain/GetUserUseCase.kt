@@ -8,7 +8,7 @@ class GetUserUseCase @Inject constructor(
     private val repository: CourseRepository
 ) {
 
-    suspend operator fun invoke(user: String): User? =
+    suspend operator fun invoke(user: String? = null): User? =
         repository.getUserFromDatabase(user)
 
 }

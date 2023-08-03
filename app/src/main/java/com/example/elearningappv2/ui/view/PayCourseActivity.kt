@@ -1,26 +1,32 @@
 package com.example.elearningappv2.ui.view
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import com.amrdeveloper.lottiedialog.LottieDialog
 import com.example.elearningappv2.R
 import com.example.elearningappv2.databinding.ActivityPayCourseBinding
 import com.example.elearningappv2.domain.model.Course
 import com.example.elearningappv2.ui.viewmodel.PayCourseViewModel
 import com.example.elearningappv2.utilities.Helpers
+import dagger.hilt.android.AndroidEntryPoint
 import io.conekta.conektasdk.Card
 import io.conekta.conektasdk.Conekta
 import io.conekta.conektasdk.Token
 import org.json.JSONObject
 
+@AndroidEntryPoint
 class PayCourseActivity : AppCompatActivity() {
 
     companion object {
@@ -57,7 +63,11 @@ class PayCourseActivity : AppCompatActivity() {
         errorTag = resources.getString(R.string.errorLabel) // Error:
         uuidDeviceTag = resources.getString(R.string.uuidDeviceLabel) // Uuid device:
 
-        binding.btnTokenize.setOnClickListener { onPressTokenizeButton() }
+        binding.btnTokenize.setOnClickListener {
+            if (course != null) {
+                onPressTokenizeButton(course.id)
+            }
+        }
         initObservers()
     }
 
@@ -71,9 +81,14 @@ class PayCourseActivity : AppCompatActivity() {
         payCourseViewModel.isLoading.observe(this, Observer{
             binding.progressBar.isVisible = it
         })
+        payCourseViewModel.navigateToHome.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                goToHome()
+            }
+        })
     }
 
-    private fun onPressTokenizeButton() {
+    private fun onPressTokenizeButton(idCourse: Int) {
         enableInputs(false)
         enableProgressBar(true)
         if (hasInternetConnection()) {
@@ -86,8 +101,7 @@ class PayCourseActivity : AppCompatActivity() {
                 val token = Token(this)
 
                 //Listen when token is returned
-                token.onCreateTokenListener { data -> showTokenResult(data) }
-
+                token.onCreateTokenListener { data -> showTokenResult(data, idCourse) }
                 //Request for create token
                 token.create(card)
             } else {
@@ -116,26 +130,32 @@ class PayCourseActivity : AppCompatActivity() {
         binding.shadowView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun showTokenResult(data: JSONObject) {
+    private fun showTokenResult(data: JSONObject, idCourse: Int) {
         Log.e("dfragoso94", "showTokenResult: $data")
-        /*try {
-            val tokenId: String = if (data.has("id")) {
-                data.getString("id")
-            } else {
-                data.getString("message")
+        /*
+         {"object":"error","type":"parameter_validation_error","message":"The card number is invalid.",
+         "message_to_purchaser":"El número de la tarjeta es inválido.","param":"card[card[number]]",
+         "code":"invalid_number","validation_error":null}
+         */
+        try {
+            if(data.has("id")){
+                payCourseViewModel.shopCourse(idCourse)
+                payCourseViewModel.responseModel.observe(this@PayCourseActivity, Observer
+                {
+                    if (it) {
+                        showDialogLottie("Gracias por realizar la compra.", !it)
+                    }
+                })
             }
-            val tokenMessage = "$tokenIdTag $tokenId"
-            binding.outputView.text = tokenMessage
-            Log.d(tokenIdTag, tokenId)
-        } catch (error: Exception) {
-            val errorMessage = "$errorTag $error"
-            binding.outputView.text = errorMessage
+            else{
+                showDialogLottie(data.getString("message_to_purchaser"), true)
+            }
+        }
+        catch (error: Exception){
+            Log.d("dfragoso94", error.message.toString())
         }
         enableInputs(true)
         enableProgressBar(false)
-
-        val uuidMessage: String = uuidDeviceTag + " " + Conekta.deviceFingerPrint(this)
-        binding.uuidDevice.text = uuidMessage*/
     }
 
     private fun hasInternetConnection(): Boolean {
@@ -171,4 +191,42 @@ class PayCourseActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDialogLottie(msg: String, isError:Boolean){
+        lateinit var dialog : LottieDialog
+        val okButton = Button(this)
+        okButton.setText("Entendido")
+        okButton.setOnClickListener{
+            if(isError){
+                dialog.cancel()
+            }
+            else{
+                payCourseViewModel.onHomeSelected()
+            }
+        }
+
+        try{
+            dialog = LottieDialog(this)
+                .setAnimation(if (isError) R.raw.error else R.raw.succeful)
+                .setAnimationRepeatCount(LottieDialog.INFINITE)
+                .setAutoPlayAnimation(true)
+                .setTitle("Elearning")
+                .setTitleColor(Color.BLACK)
+                .setMessage(msg)
+                .setMessageColor(Color.BLACK)
+                .setDialogBackground(Color.WHITE)
+                .setCancelable(false)
+                .addActionButton(okButton)
+                .setOnShowListener(DialogInterface.OnShowListener { dialogInterface: DialogInterface? -> })
+                .setOnDismissListener(DialogInterface.OnDismissListener { dialogInterface: DialogInterface? -> })
+                .setOnCancelListener(DialogInterface.OnCancelListener { dialogInterface: DialogInterface? -> })
+            dialog.show()
+        }
+        catch (e: Exception){
+            Log.d("dfragoso94", e.message.toString())
+        }
+    }
+
+    private fun goToHome() {
+        startActivity(HomeActivity.create(this))
+    }
 }
