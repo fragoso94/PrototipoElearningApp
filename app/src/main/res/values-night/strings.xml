@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_gallery">Galería</string>
+    <string name="button_cam">Cámara</string>
+    <string name="tv_change_pass">Cambiar contraseña</string>
+</resources>
