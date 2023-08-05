@@ -44,10 +44,10 @@
 
     <!--  CONEKTA  -->
     <string name="XXXX">XXXX-XXXX-XXXX-XXXX</string>
-    <string name="cardNumber">Card number:</string>
-    <string name="cardName">Name that appears on the card:</string>
-    <string name="expire">Expiration:</string>
-    <string name="cardCvc">Security code:</string>
+    <string name="cardNumber">Número de tarjeta:</string>
+    <string name="cardName">Nombre que aparece en la tarjeta:</string>
+    <string name="expire">Expiración:</string>
+    <string name="cardCvc">Código de seguridad:</string>
     <string name="mm">MM</string>
     <string name="yyyy">AAAA</string>
     <string name="name">Name</string>

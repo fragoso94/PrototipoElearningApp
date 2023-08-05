@@ -22,6 +22,8 @@ data class UserEntity(
     var password: String,
 
     @ColumnInfo(name = "status")
-    val status: Boolean
+    val status: Boolean,
 
+    @ColumnInfo(name = "credit")
+    val credit: Int = 0
 )

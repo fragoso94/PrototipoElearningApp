@@ -16,7 +16,7 @@ import javax.inject.Inject
 class CourseViewModel @Inject constructor(
     private val getCourseUseCase: GetCourseUseCase,
     private val getUserUseCase: GetUserUseCase,
-    private val getCourseShopping: GetCourseShoppingUseCase
+    private val getCourseShopping: GetCourseShoppingUseCase,
 ) : ViewModel()
 {
     val courseModel = MutableLiveData<List<Course>?>()
@@ -38,20 +38,15 @@ class CourseViewModel @Inject constructor(
         }
     }
 
-    fun getUser(user: String){
+    fun getListShoppingCourse(){
         viewModelScope.launch {
-            val result = getUserUseCase(user)
-            if(result != null){
-                userModel.postValue(result)
-            }
-        }
-    }
-
-    fun getListShoppingCourse(user: User){
-        viewModelScope.launch {
-            val result = getCourseShopping(user.id)
-            if(!result.isNullOrEmpty()){
-                courseShoppingModel.postValue(result)
+            val userResponse = getUserUseCase()
+            if(userResponse != null){
+                userModel.postValue(userResponse)
+                val result = getCourseShopping(userResponse.id)
+                if(!result.isNullOrEmpty()){
+                    courseShoppingModel.postValue(result)
+                }
             }
         }
     }

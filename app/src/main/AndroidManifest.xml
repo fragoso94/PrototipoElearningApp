@@ -20,6 +20,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.UpdateActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.view.ChangePassActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.view.PayCourseActivity"
             android:exported="false">
             <meta-data
@@ -68,7 +82,9 @@
                 android:value="" />
         </activity>
 
-        <uses-library android:name ="org.apache.http.legacy" android:required ="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>
