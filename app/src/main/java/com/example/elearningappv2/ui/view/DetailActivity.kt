@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.elearningappv2.databinding.ActivityDetailBinding
 import com.example.elearningappv2.domain.model.Course
-import com.example.elearningappv2.ui.viewmodel.CourseViewModel
 import com.example.elearningappv2.ui.viewmodel.IntroductionViewModel
 import com.example.elearningappv2.utilities.Helpers
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     companion object {
@@ -51,7 +51,9 @@ class DetailActivity : AppCompatActivity() {
         binding.buttonPlay.visibility = if (!isViewBuy) View.VISIBLE else View.GONE
 
         binding.buttonBuy.setOnClickListener {
-
+            if(course != null){
+                introductionViewModel.onPayCourseSelected(course)
+            }
         }
         binding.buttonPlay.setOnClickListener {
             introductionViewModel.onListVideoSelected()
@@ -66,9 +68,20 @@ class DetailActivity : AppCompatActivity() {
                 goToListVideo()
             }
         })
+        introductionViewModel.navigateToPayCourse.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                //Log.d("observer", it.toString())
+                goToPay(it)
+            }
+
+        })
     }
 
     private fun goToListVideo() {
         startActivity(CourseListVideoActivity.create(this))
+    }
+
+    private fun goToPay(course: Course) {
+        startActivity(PayCourseActivity.create(this,course))
     }
 }

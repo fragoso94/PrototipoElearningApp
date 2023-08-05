@@ -13,7 +13,7 @@ interface UserDao {
     suspend fun getUserId(userName: String): UserEntity
 
     @Query("select * from user_table where email = :userEmail")
-    suspend fun getUserEmail(userEmail: String): UserEntity
+    suspend fun getUserEmail(userEmail: String): UserEntity?
 
     @Query("UPDATE user_table SET status = :userStatus WHERE email = :userName")
     suspend fun updateStatusUser(userName: String, userStatus: Boolean)

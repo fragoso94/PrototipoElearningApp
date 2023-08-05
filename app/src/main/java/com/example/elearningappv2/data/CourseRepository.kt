@@ -51,8 +51,9 @@ class CourseRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserFromDatabase(email: String): User? {
-        return userDao.getUserEmail(email).toDomain()
+    suspend fun getUserFromDatabase(email: String?): User? {
+        //return
+        return if(email != null) userDao.getUserEmail(email)?.toDomain() else userDao.getUserLogin()?.toDomain()
     }
 
     suspend fun insertShoppingFromDatabase(shoppin: ShoppingEntity): Boolean {

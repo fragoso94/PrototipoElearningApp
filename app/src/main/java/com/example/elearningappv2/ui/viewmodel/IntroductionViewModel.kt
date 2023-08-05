@@ -34,6 +34,10 @@ class IntroductionViewModel @Inject constructor() : ViewModel() {
     val navigateToDetailCourse: LiveData<Event<Course>>
         get() = _navigateToDetailCourse
 
+    private val _navigateToPayCourse = MutableLiveData<Event<Course>>()
+    val navigateToPayCourse: LiveData<Event<Course>>
+        get() = _navigateToPayCourse
+
     fun onLoginSelected() {
         _navigateToLogin.value = Event(true)
     }
@@ -52,5 +56,9 @@ class IntroductionViewModel @Inject constructor() : ViewModel() {
 
     fun onDetailCourseSelected(course: Course){
         _navigateToDetailCourse.value = Event(course)
+    }
+
+    fun onPayCourseSelected(course: Course){
+        _navigateToPayCourse.value = Event(course)
     }
 }
