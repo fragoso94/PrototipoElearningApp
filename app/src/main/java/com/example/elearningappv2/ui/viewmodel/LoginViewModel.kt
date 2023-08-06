@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elearningappv2.data.response.LoginResult
+import com.example.elearningappv2.domain.CloseSessionUseCase
 import com.example.elearningappv2.domain.GetUserUseCase
 import com.example.elearningappv2.domain.LoginUseCase
 import com.example.elearningappv2.domain.UpdateUserStatusUseCase
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     val loginUseCase: LoginUseCase,
     private val getUserUseCase: GetUserUseCase,
-    val updateUserStatusUseCase: UpdateUserStatusUseCase
-
+    val updateUserStatusUseCase: UpdateUserStatusUseCase,
+    val closeSessionUseCase: CloseSessionUseCase
 ) : ViewModel()
 {
     val responseModel = MutableLiveData<SimpleResponse>()
@@ -32,8 +33,9 @@ class LoginViewModel @Inject constructor(
                 }
                 is LoginResult.Success -> {
                     //update status user
+                    val responseSession = closeSessionUseCase()
                     val userExist = getUserUseCase(user)
-                    if (userExist != null){
+                    if (userExist != null && responseSession){
                         val response = updateUserStatusUseCase(user, true)
                         if (response){
                             responseModel.postValue(SimpleResponse(exito = true, mensaje = "La cuenta se verifico correctamente."))

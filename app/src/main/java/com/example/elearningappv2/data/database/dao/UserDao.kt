@@ -18,13 +18,14 @@ interface UserDao {
     @Query("UPDATE user_table SET status = :userStatus WHERE email = :userName")
     suspend fun updateStatusUser(userName: String, userStatus: Boolean)
 
-    @Query("UPDATE user_table SET credit = credit + :amount WHERE email = :userName")
-    suspend fun updateCreditUser(amount: Int, userName: String)
+    @Query("UPDATE user_table SET credit = credit + 1 WHERE email = :userName")
+    suspend fun updateCreditUser(userName: String)
 
     @Query("select credit from user_table WHERE email = :userName")
     suspend fun getUserCredit(userName: String): Int
 
-
+    @Query("UPDATE user_table SET status = 0")
+    suspend fun updateCloseSessionUser(): Unit
 
     @Query("select * from user_table where status = 1 LIMIT 1")
     suspend fun getUserLogin(): UserEntity?

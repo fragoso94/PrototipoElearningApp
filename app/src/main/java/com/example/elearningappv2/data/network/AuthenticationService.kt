@@ -20,6 +20,16 @@ class AuthenticationService @Inject constructor(
         return firebase.auth.createUserWithEmailAndPassword(email, password).await()
     }
 
+    suspend fun singOutAccount(): Boolean {
+        return try {
+            firebase.auth.signOut()
+            true
+        }
+        catch (e: java.lang.Exception){
+            false
+        }
+    }
+
     private fun Result<AuthResult>.toLoginResult() = when (val result = getOrNull()) {
         null -> LoginResult.Error
         else -> {

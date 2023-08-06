@@ -33,15 +33,6 @@ class CourseRepository @Inject constructor(
         }
     }
 
-    suspend fun updateUserFromDatabase(user: UserEntity): Boolean {
-        return try {
-            userDao.update(user)
-            true
-        } catch (e: java.lang.Exception) {
-            false
-        }
-    }
-
     suspend fun updateUserStatusFromDatabase(user: String, status: Boolean): Boolean {
         return try {
             userDao.updateStatusUser(user, status)
@@ -51,9 +42,18 @@ class CourseRepository @Inject constructor(
         }
     }
 
-    suspend fun updateUserStatusFromDatabase(amount: Int, user: String): Boolean {
+    suspend fun updateUserFromDatabase(user: UserEntity): Boolean {
         return try {
-            userDao.updateCreditUser(amount, user)
+            userDao.update(user)
+            true
+        } catch (e: java.lang.Exception) {
+            false
+        }
+    }
+
+    suspend fun updateUserCreditFromDatabase(user: String): Boolean {
+        return try {
+            userDao.updateCreditUser(user)
             true
         } catch (e: java.lang.Exception) {
             false
@@ -65,6 +65,15 @@ class CourseRepository @Inject constructor(
             userDao.getUserCredit(email)
         } catch (e: java.lang.Exception) {
             0
+        }
+    }
+
+    suspend fun closeSessionUsersFromDatabase(): Boolean {
+        return try {
+            userDao.updateCloseSessionUser()
+            true
+        } catch (e: java.lang.Exception) {
+            false
         }
     }
 

@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.elearningappv2.databinding.ActivityDetailBinding
 import com.example.elearningappv2.domain.model.Course
+import com.example.elearningappv2.ui.viewmodel.DetailCourseViewModel
 import com.example.elearningappv2.ui.viewmodel.IntroductionViewModel
 import com.example.elearningappv2.utilities.Helpers
 import com.squareup.picasso.Picasso
@@ -29,6 +30,7 @@ class DetailActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityDetailBinding
     private val introductionViewModel: IntroductionViewModel by viewModels()
+    private val detailCourseViewModel: DetailCourseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +48,25 @@ class DetailActivity : AppCompatActivity() {
             binding.tvPrice.text = "$" + String.format("%.2f", course.price)
             binding.tvDuration.text = String.format("%.2f", course.duration) + " horas"
             binding.rbCalification.rating = course.rating
-        }
-        binding.buttonBuy.visibility = if (isViewBuy) View.VISIBLE else View.GONE
-        binding.buttonPlay.visibility = if (!isViewBuy) View.VISIBLE else View.GONE
 
+            if(isViewBuy){
+                binding.buttonPlay.visibility = View.GONE
+                detailCourseViewModel.getListShoppingCourse()
+                detailCourseViewModel.courseShoppingModel.observe(this, Observer {
+                    if(it.contains(course.id)){
+                        binding.buttonBuy.visibility = View.GONE
+                    }
+                    else{
+                        binding.buttonBuy.visibility = if (isViewBuy) View.VISIBLE else View.GONE
+                    }
+                })
+            }
+            else{
+                binding.buttonBuy.visibility = View.GONE
+                binding.buttonPlay.visibility = View.VISIBLE
+            }
+
+        }
         binding.buttonBuy.setOnClickListener {
             if(course != null){
                 introductionViewModel.onPayCourseSelected(course)

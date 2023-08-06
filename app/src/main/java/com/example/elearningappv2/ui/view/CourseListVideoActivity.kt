@@ -2,14 +2,21 @@ package com.example.elearningappv2.ui.view
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.MediaController
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.example.elearningappv2.R
 import com.example.elearningappv2.databinding.ActivityCourseListVideoBinding
+import com.example.elearningappv2.ui.viewmodel.CourseListVideoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CourseListVideoActivity : AppCompatActivity() {
 
     companion object {
@@ -18,6 +25,7 @@ class CourseListVideoActivity : AppCompatActivity() {
     }
 
     lateinit var binding : ActivityCourseListVideoBinding
+    private val profileViewModel: CourseListVideoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +53,17 @@ class CourseListVideoActivity : AppCompatActivity() {
             fbPlay1.setOnClickListener {
                 videoView1.start()
             }
+            videoView1.setOnInfoListener { mediaPlayer, what, extra ->
+                // solo se insertará la primera vez y cuando finalize de ver los videos.
+                if(what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START){
+                    profileViewModel.insertUserCredit()
+                    profileViewModel.responseModel.observe(this@CourseListVideoActivity, Observer {
+                        Log.d("dfragoso94", "El credito se agrego correctament, estatus: $it")
+                    })
+                }
+                true
+            }
+
 
             videoView2.setVideoURI(Uri.parse(path + R.raw.curso2))
             videoView2.setMediaController(mediaController2)
@@ -52,12 +71,32 @@ class CourseListVideoActivity : AppCompatActivity() {
             fbPlay2.setOnClickListener {
                 videoView2.start()
             }
+            videoView2.setOnInfoListener { mediaPlayer, what, extra ->
+                // solo se insertará la primera vez y cuando finalize de ver los videos.
+                if(what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START){
+                    profileViewModel.insertUserCredit()
+                    profileViewModel.responseModel.observe(this@CourseListVideoActivity, Observer {
+                        Log.d("dfragoso94", "El credito se agrego correctament, estatus: $it")
+                    })
+                }
+                true
+            }
 
             videoView3.setVideoURI(Uri.parse(path + R.raw.curso3))
             videoView3.setMediaController(mediaController3)
             videoView3.requestFocus()
             fbPlay3.setOnClickListener {
                 videoView3.start()
+            }
+            videoView3.setOnInfoListener { mediaPlayer, what, extra ->
+                // solo se insertará la primera vez y cuando finalize de ver los videos.
+                if(what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START){
+                    profileViewModel.insertUserCredit()
+                    profileViewModel.responseModel.observe(this@CourseListVideoActivity, Observer {
+                        Log.d("dfragoso94", "El credito se agrego correctamente, estatus: $it")
+                    })
+                }
+                true
             }
         }
 

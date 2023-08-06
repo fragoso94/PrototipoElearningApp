@@ -23,7 +23,7 @@
     <string name="input_confirmpass_newpass">Confirmar nueva contraseña</string>
     <string name="title_button_update">Actualizar</string>
     <string name="title_button_update2">Actualizar</string>
-    <string name="title_profile_edit">Cambiar la información del perfil</string>
+    <string name="title_profile_edit">Información del perfil</string>
     <string name="title_profile_change_pass">Cambiar contraseña</string>
     <string name="title_profile_logout">Cerrar sesión</string>
     <string name="title_profile">Editar perfil</string>
