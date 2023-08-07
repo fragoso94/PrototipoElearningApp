@@ -48,10 +48,11 @@
             android:id="@+id/courseImage"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:src="@drawable/bedu_icon"
             android:adjustViewBounds="true"
+            android:src="@drawable/bedu_icon"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/tvCourse"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
 
         <RatingBar

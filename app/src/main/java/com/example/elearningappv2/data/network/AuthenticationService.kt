@@ -30,6 +30,16 @@ class AuthenticationService @Inject constructor(
         }
     }
 
+    suspend fun updateEmailAccount(user: String): Boolean {
+        var response = false
+        val currentUser = firebase.auth.currentUser
+        currentUser!!.updateEmail(user)
+            .addOnCompleteListener { task ->
+                response = task.isSuccessful
+            }
+        return response
+    }
+
     private fun Result<AuthResult>.toLoginResult() = when (val result = getOrNull()) {
         null -> LoginResult.Error
         else -> {

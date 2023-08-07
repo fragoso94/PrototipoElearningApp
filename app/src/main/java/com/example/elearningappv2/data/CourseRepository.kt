@@ -44,7 +44,7 @@ class CourseRepository @Inject constructor(
 
     suspend fun updateUserFromDatabase(user: UserEntity): Boolean {
         return try {
-            userDao.update(user)
+            userDao.update(user.id, user.name, user.email, user.mobile)
             true
         } catch (e: java.lang.Exception) {
             false
